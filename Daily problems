@@ -1,0 +1,25 @@
+Que : 2684. Maximum Number of Moves in a Grid
+Source code : 
+class Solution {
+    
+    public int solve(int[][] grid,int [][]dp, int r, int c, int count){
+       if(dp[r][c] != -1) return dp[r][c];
+       int top = 0, right = 0, btm = 0;
+       if(r-1 >= 0 && c+1 < grid[0].length && grid[r][c] < grid[r-1][c+1])
+          top = solve(grid ,dp, r - 1, c + 1, count + 1);
+       if(c+1 < grid[0].length && grid[r][c] < grid[r][c+1])
+          right = solve(grid ,dp, r, c + 1, count + 1);
+       if(r+1 < grid.length && c+1 < grid[0].length && grid[r][c] < grid[r+1][c+1])
+          btm = solve(grid ,dp, r + 1, c + 1, count + 1);
+
+       dp[r][c] = Math.max(Math.max(top , right) , btm);
+       return dp[r][c] + 1;
+    }
+    public int maxMoves(int[][] grid) {
+        int ans = 0;
+        int [][]dp = new int[grid.length][grid[0].length];
+        for(int []arr : dp) Arrays.fill(arr , -1);
+        for(int i = 0; i < grid.length; i++) ans = Math.max(ans , solve(grid , dp, i , 0, 0) - 1);
+        return ans;
+    }
+}
